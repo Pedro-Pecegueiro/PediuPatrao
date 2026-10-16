@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<div th:fragment="content">
+    <div class="page-header">
+        <div>
+            <p class="eyebrow">PAINEL OPERACIONAL</p>
+            <h1>Olá, <span th:text="${usuarioAtual}">usuário</span></h1>
+            <p>Acompanhe a operação e acesse as áreas permitidas para o seu perfil.</p>
+        </div>
+        <span class="role-chip" sec:authorize="hasRole('ADMIN')">admin</span>
+        <span class="role-chip" sec:authorize="hasRole('GERENTE')">gerente</span>
+        <span class="role-chip" sec:authorize="hasRole('ATENDENTE')">atendente</span>
+    </div>
+    <div class="row g-4 mt-1">
+        <div class="col-md-4"><a th:href="@{/pedidos}" class="metric-card"><i class="bi bi-receipt"></i><span>Pedidos</span><strong th:text="${totalPedidos}">0</strong></a></div>
+        <div class="col-md-4"><a th:href="@{/clientes}" class="metric-card"><i class="bi bi-people"></i><span>Clientes</span><strong th:text="${totalClientes}">0</strong></a></div>
+        <div class="col-md-4"><a th:href="@{/produtos}" class="metric-card"><i class="bi bi-box-seam"></i><span>Produtos</span><strong th:text="${totalProdutos}">0</strong></a></div>
+    </div>
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-body p-4">
+            <h2 class="h5">Regras em vigor</h2>
+            <div class="row g-3 mt-1 small text-secondary">
+                <div class="col-lg-4"><i class="bi bi-lock-fill text-primary me-2"></i>Descontos e cancelamentos são exclusivos do gerente.</div>
+                <div class="col-lg-4"><i class="bi bi-arrow-repeat text-primary me-2"></i>Status seguem o fluxo obrigatório do pedido.</div>
+                <div class="col-lg-4"><i class="bi bi-journal-check text-primary me-2"></i>Mudanças relevantes geram auditoria persistente.</div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

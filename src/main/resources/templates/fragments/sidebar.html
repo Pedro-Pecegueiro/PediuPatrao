@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<div th:fragment="sidebar" id="sidebar">
+    <a th:href="@{/}" class="brand">
+        <img th:src="@{/images/logo_interna.png}" alt="PediuPatrão Pedro">
+        <span>PediuPatrão Pedro</span>
+    </a>
+    <div class="user-panel">
+        <i class="bi bi-person-circle"></i>
+        <div>
+            <strong sec:authentication="name">usuário</strong>
+            <small sec:authorize="hasRole('ADMIN')">admin</small>
+            <small sec:authorize="hasRole('GERENTE')">gerente</small>
+            <small sec:authorize="hasRole('ATENDENTE')">atendente</small>
+        </div>
+    </div>
+    <nav class="nav flex-column">
+        <a class="nav-link" th:href="@{/}"><i class="bi bi-grid"></i>Visão geral</a>
+        <a class="nav-link" th:href="@{/pedidos}"><i class="bi bi-receipt"></i>Pedidos</a>
+        <a class="nav-link" th:href="@{/clientes}"><i class="bi bi-people"></i>Clientes</a>
+        <a class="nav-link" th:href="@{/produtos}"><i class="bi bi-box-seam"></i>Produtos</a>
+        <a class="nav-link" th:href="@{/auditoria}" sec:authorize="hasAnyRole('ADMIN','GERENTE')">
+            <i class="bi bi-shield-check"></i>Auditoria
+        </a>
+        <a class="nav-link" th:href="@{/usuarios}" sec:authorize="hasRole('ADMIN')">
+            <i class="bi bi-person-gear"></i>Usuários
+        </a>
+    </nav>
+    <form th:action="@{/logout}" method="post" class="logout-form">
+        <button class="btn btn-outline-light w-100" type="submit"><i class="bi bi-box-arrow-left me-2"></i>Sair</button>
+    </form>
+</div>
+</body>
+</html>

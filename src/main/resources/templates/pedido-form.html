@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content">
+    <div class="page-header"><div><p class="eyebrow">PEDIDOS</p><h1>Novo pedido</h1><p>Preços e total serão calculados no servidor a partir dos produtos cadastrados.</p></div></div>
+    <form th:action="@{/pedidos/salvar}" method="post" class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+            <div class="mb-4"><label class="form-label" for="clienteId">Cliente</label><select class="form-select" id="clienteId" name="clienteId" required><option value="">Selecione um cliente</option><option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="|${cliente.nome} - ${cliente.telefone}|"></option></select></div>
+            <h2 class="h5">Itens</h2>
+            <p class="text-secondary small">Preencha uma ou mais linhas. Linhas vazias serão ignoradas.</p>
+            <div class="row g-2 align-items-end mb-2" th:each="numero : ${#numbers.sequence(1, 5)}">
+                <div class="col-md-9"><label class="form-label" th:text="|Produto ${numero}|">Produto</label><select class="form-select" name="produtoId"><option value="">Selecione</option><option th:each="produto : ${produtos}" th:value="${produto.id}" th:text="|${produto.nome} - R$ ${#numbers.formatDecimal(produto.preco, 1, 'POINT', 2, 'COMMA')}|"></option></select></div>
+                <div class="col-md-3"><label class="form-label">Quantidade</label><input class="form-control" type="number" name="quantidade" min="1" max="99"></div>
+            </div>
+        </div>
+        <div class="card-footer bg-white border-0 p-4 pt-0 d-flex gap-2"><button class="btn btn-primary" type="submit">Registrar pedido</button><a th:href="@{/pedidos}" class="btn btn-outline-secondary">Cancelar</a></div>
+    </form>
+</div>
+</body>
+</html>

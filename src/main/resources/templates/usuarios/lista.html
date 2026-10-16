@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content">
+    <div class="page-header"><div><p class="eyebrow">ADMINISTRAÇÃO</p><h1>Usuários e perfis</h1><p>Somente administradores podem criar contas ou atribuir perfis.</p></div><a th:href="@{/usuarios/novo}" class="btn btn-primary"><i class="bi bi-person-plus me-1"></i>Novo usuário</a></div>
+    <div th:if="${sucesso}" class="alert alert-success" th:text="${sucesso}"></div>
+    <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+    <div class="card border-0 shadow-sm"><div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="table-dark"><tr><th>Usuário</th><th>Perfil</th><th>Situação</th><th class="text-end">Ações</th></tr></thead>
+            <tbody>
+            <tr th:each="usuario : ${usuarios}">
+                <td class="fw-semibold" th:text="${usuario.username}">usuario</td>
+                <td><span class="badge text-bg-dark" th:text="${#strings.toLowerCase(usuario.role.name())}">admin</span></td>
+                <td><span class="badge" th:classappend="${usuario.ativo} ? 'text-bg-success' : 'text-bg-secondary'" th:text="${usuario.ativo ? 'Ativo' : 'Inativo'}">Ativo</span></td>
+                <td class="text-end text-nowrap">
+                    <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}" class="btn btn-sm btn-outline-primary">Editar</a>
+                    <form th:action="@{/usuarios/deletar/{id}(id=${usuario.id})}" method="post" class="d-inline" onsubmit="return confirm('Excluir este usuário?');"><button class="btn btn-sm btn-outline-danger" type="submit">Excluir</button></form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div></div>
+</div>
+</body>
+</html>

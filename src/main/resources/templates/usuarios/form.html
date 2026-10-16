@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content">
+    <div class="page-header"><div><p class="eyebrow">USUÁRIOS</p><h1 th:text="${usuario.id == null ? 'Novo usuário' : 'Editar usuário'}">Usuário</h1><p>O cadastro público não existe; perfis só são atribuídos nesta área administrativa.</p></div></div>
+    <form th:action="${usuario.id == null} ? @{/usuarios/salvar} : @{/usuarios/editar/{id}(id=${usuario.id})}" method="post" class="card border-0 shadow-sm" style="max-width: 680px">
+        <div class="card-body p-4"><div class="row g-3">
+            <div class="col-md-7"><label class="form-label" for="username">Usuário</label><input class="form-control" id="username" name="username" th:value="${usuario.username}" pattern="[a-zA-Z0-9._-]{3,40}" required></div>
+            <div class="col-md-5"><label class="form-label" for="role">Perfil</label><select class="form-select" id="role" name="role" required><option th:each="perfil : ${perfis}" th:value="${perfil}" th:text="${#strings.toLowerCase(perfil.name())}" th:selected="${perfil == usuario.role}"></option></select></div>
+            <div class="col-12"><label class="form-label" for="password">Senha <small class="text-secondary" th:if="${usuario.id != null}">(deixe em branco para manter)</small></label><input class="form-control" type="password" id="password" name="password" minlength="8" maxlength="72" th:required="${usuario.id == null}" autocomplete="new-password"></div>
+            <div class="col-12"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="ativo" name="ativo" value="true" th:checked="${usuario.ativo}"><label class="form-check-label" for="ativo">Conta ativa</label></div></div>
+        </div></div>
+        <div class="card-footer bg-white border-0 p-4 pt-0 d-flex gap-2"><button class="btn btn-primary" type="submit">Salvar</button><a th:href="@{/usuarios}" class="btn btn-outline-secondary">Cancelar</a></div>
+    </form>
+</div>
+</body>
+</html>

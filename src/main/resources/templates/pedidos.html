@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<div th:fragment="content">
+    <div class="page-header">
+        <div><p class="eyebrow">OPERAÇÃO</p><h1>Pedidos</h1><p>Fluxo controlado do recebimento à finalização, com entrada, saída e responsáveis.</p></div>
+        <a th:href="@{/pedidos/novo}" class="btn btn-primary" sec:authorize="hasAnyRole('GERENTE','ATENDENTE')"><i class="bi bi-plus-lg me-1"></i>Novo pedido</a>
+    </div>
+    <div th:if="${sucesso}" class="alert alert-success" th:text="${sucesso}"></div>
+    <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+    <div th:if="${#lists.isEmpty(pedidos)}" class="empty-state"><i class="bi bi-receipt"></i><h2>Nenhum pedido registrado</h2><p>Crie o primeiro pedido para iniciar o fluxo.</p></div>
+    <div class="card border-0 shadow-sm mb-4" th:each="pedido : ${pedidos}">
+        <div class="card-header bg-white p-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <div><strong th:text="|Pedido #${pedido.id}|"></strong><small class="d-block text-secondary" th:text="|Entrada: ${pedido.dataEntrada} por ${pedido.responsavelRegistro}|">Entrada</small></div>
+            <span class="status-badge" th:classappend="|status-${pedido.status}|" th:text="${pedido.status.descricao}">Recebido</span>
+        </div>
+        <div class="card-body p-4">
+            <div class="row g-4">
+                <div class="col-lg-7">
+                    <h2 class="h6" th:text="|Cliente: ${pedido.clienteNome}|">Cliente</h2>
+                    <div class="table-responsive"><table class="table table-sm"><thead><tr><th>Produto</th><th>Qtd.</th><th>Unitário</th><th>Subtotal</th></tr></thead><tbody>
+                    <tr th:each="item : ${pedido.itens}"><td th:text="${item.nomeProduto}">Produto</td><td th:text="${item.quantidade}">1</td><td th:text="|R$ ${#numbers.formatDecimal(item.precoUnitario, 1, 'POINT', 2, 'COMMA')}|">R$ 0,00</td><td th:text="|R$ ${#numbers.formatDecimal(item.subtotal, 1, 'POINT', 2, 'COMMA')}|">R$ 0,00</td></tr>
+                    </tbody></table></div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="data-box">
+                        <div class="d-flex justify-content-between"><span>Subtotal</span><strong th:text="|R$ ${#numbers.formatDecimal(pedido.subtotal, 1, 'POINT', 2, 'COMMA')}|">R$ 0,00</strong></div>
+                        <div class="d-flex justify-content-between text-success"><span th:text="|Desconto (${pedido.descontoPercentual}%)|">Desconto</span><strong th:text="|- R$ ${#numbers.formatDecimal(pedido.valorDesconto, 1, 'POINT', 2, 'COMMA')}|">R$ 0,00</strong></div>
+                        <hr><div class="d-flex justify-content-between fs-5"><span>Total</span><strong th:text="|R$ ${#numbers.formatDecimal(pedido.valorTotal, 1, 'POINT', 2, 'COMMA')}|">R$ 0,00</strong></div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 small text-secondary" th:if="${pedido.dataSaida != null}"><i class="bi bi-truck me-1"></i><span th:text="|Saída: ${pedido.dataSaida} por ${pedido.responsavelSaida}|">Saída</span></div>
+            <div class="alert alert-danger mt-3 mb-0" th:if="${pedido.status.name() == 'CANCELADO'}"><strong>Cancelado:</strong> <span th:text="${pedido.justificativaCancelamento}"></span><small class="d-block" th:text="|${pedido.dataCancelamento} por ${pedido.responsavelCancelamento}|"></small></div>
+        </div>
+        <div class="card-footer bg-white p-3 d-flex flex-wrap gap-2" th:if="${pedido.status.name() != 'FINALIZADO' and pedido.status.name() != 'CANCELADO'}">
+            <form th:action="@{/pedidos/{id}/status(id=${pedido.id})}" method="post" class="d-flex gap-2" sec:authorize="hasAnyRole('GERENTE','ATENDENTE')" th:if="${!pedido.status.proximosStatus().isEmpty()}">
+                <select class="form-select form-select-sm" name="status" required><option value="">Próximo status</option><option th:each="proximo : ${pedido.status.proximosStatus()}" th:value="${proximo}" th:text="${proximo.descricao}"></option></select>
+                <button class="btn btn-sm btn-outline-primary" type="submit">Avançar</button>
+            </form>
+            <button class="btn btn-sm btn-outline-dark" type="button" data-bs-toggle="collapse" th:attr="data-bs-target=${'#manager-' + pedido.id}" sec:authorize="hasRole('GERENTE')" th:if="${pedido.status.permiteDescontoOuCancelamento()}">Ações do gerente</button>
+            <div class="collapse w-100" th:id="${'manager-' + pedido.id}" sec:authorize="hasRole('GERENTE')">
+                <div class="row g-3 mt-1">
+                    <div class="col-md-5"><form th:action="@{/pedidos/{id}/desconto(id=${pedido.id})}" method="post" class="input-group input-group-sm"><span class="input-group-text">Desconto</span><input class="form-control" type="number" name="percentual" min="0.01" max="20" step="0.01" required><span class="input-group-text">%</span><button class="btn btn-success" type="submit">Aplicar</button></form></div>
+                    <div class="col-md-7"><form th:action="@{/pedidos/{id}/cancelar(id=${pedido.id})}" method="post" class="input-group input-group-sm" onsubmit="return confirm('Cancelar definitivamente este pedido?');"><input class="form-control" name="justificativa" minlength="5" maxlength="500" placeholder="Justificativa obrigatória" required><button class="btn btn-danger" type="submit">Cancelar pedido</button></form></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

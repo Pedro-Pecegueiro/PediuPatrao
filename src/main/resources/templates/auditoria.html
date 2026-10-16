@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content">
+    <div class="page-header"><div><p class="eyebrow">RASTREABILIDADE</p><h1>Auditoria</h1><p>Consulta somente leitura disponível para ADMIN e GERENTE.</p></div></div>
+    <div class="card border-0 shadow-sm"><div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="table-dark"><tr><th>Data e hora</th><th>Usuário</th><th>Operação</th><th>Entidade</th><th>Alterações</th><th>Justificativa</th></tr></thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(registros)}"><td colspan="6" class="text-center text-secondary py-5">Nenhum evento registrado.</td></tr>
+            <tr th:each="registro : ${registros}">
+                <td class="text-nowrap"><span th:text="${registro.dataHora}">data</span></td>
+                <td><strong th:text="${registro.usuario}">usuário</strong><small class="d-block text-secondary" th:text="${#strings.toLowerCase(registro.perfil.name())}">perfil</small></td>
+                <td><span class="badge text-bg-dark" th:text="${registro.operacao}">operação</span></td>
+                <td><span th:text="|${registro.entidade} #${registro.entidadeId}|">entidade</span></td>
+                <td><ul class="audit-changes"><li th:each="mudanca : ${registro.campos}"><code th:text="${mudanca.key}">campo</code>: <span th:text="${mudanca.value.valorAnterior ?: '∅'}"></span> → <span th:text="${mudanca.value.valorNovo ?: '∅'}"></span></li></ul></td>
+                <td th:text="${registro.justificativa ?: '—'}">—</td>
+            </tr>
+            </tbody>
+        </table>
+    </div></div>
+</div>
+</body>
+</html>
