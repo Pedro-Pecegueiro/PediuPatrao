@@ -101,7 +101,7 @@ A suíte automatizada verifica o cálculo dos pedidos, o registro de entrada e s
 
 ## Dashboard administrativo
 
-O dashboard está disponível em `/dashboard` para os perfis `ADMIN` e `GERENTE`. Os filtros consultam a API do próprio sistema e atualizam os indicadores e gráficos sem recarregar a página. O período padrão abrange os últimos 30 dias, incluindo a data atual; a API aceita períodos de até 366 dias.
+O dashboard está disponível em `/dashboard` para os perfis `ADMIN` e `GERENTE`. Os filtros consultam a API do próprio sistema e atualizam os indicadores e gráficos sem recarregar a página. O período padrão abrange os últimos 30 dias, incluindo a data atual; a API aceita períodos de até 365dias.
 
 Os valores de vendas e o ranking consideram pedidos não cancelados. A distribuição por status inclui os pedidos cancelados. Se um status for selecionado no filtro, ele é aplicado aos indicadores, gráficos e ranking.
 
