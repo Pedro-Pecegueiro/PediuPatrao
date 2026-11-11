@@ -105,4 +105,4 @@ O dashboard está disponível em `/dashboard` para os perfis `ADMIN` e `GERENTE`
 
 Os valores de vendas e o ranking consideram pedidos não cancelados. A distribuição por status inclui os pedidos cancelados. Se um status for selecionado no filtro, ele é aplicado aos indicadores, gráficos e ranking.
 
-Consulte [os requisitos e regras do dashboard](docs/requisitos-dashboard.md), [a documentação da API](docs/api-dashboard.md), [as evidências dos testes](docs/evidencias-testes.md) e [o roteiro da apresentação](docs/apresentacao.md).
+Consulte [os requisitos e regras do dashboard](docs/requisitos-dashboard.md), [a documentação da API](docs/api-dashboard.md) e [as evidências dos testes](docs/evidencias-testes.md).
