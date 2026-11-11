@@ -17,6 +17,9 @@
     </div>
     <nav class="nav flex-column">
         <a class="nav-link" th:href="@{/}"><i class="bi bi-grid"></i>Visão geral</a>
+        <a class="nav-link" th:href="@{/dashboard}" sec:authorize="hasAnyRole('ADMIN','GERENTE')">
+            <i class="bi bi-bar-chart-line"></i>Dashboard administrativo
+        </a>
         <a class="nav-link" th:href="@{/pedidos}"><i class="bi bi-receipt"></i>Pedidos</a>
         <a class="nav-link" th:href="@{/clientes}"><i class="bi bi-people"></i>Clientes</a>
         <a class="nav-link" th:href="@{/produtos}"><i class="bi bi-box-seam"></i>Produtos</a>

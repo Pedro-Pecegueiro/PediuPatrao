@@ -69,6 +69,14 @@ public class HomeController {
         return "layout";
     }
 
+    @GetMapping("/dashboard")
+    @PreAuthorize("hasAnyRole('ADMIN','GERENTE')")
+    public String dashboard(Model model) {
+        model.addAttribute("statusPedidos", StatusPedido.values());
+        model.addAttribute("content", "dashboard :: content");
+        return "layout";
+    }
+
     @GetMapping("/usuarios")
     @PreAuthorize("hasRole('ADMIN')")
     public String listarUsuarios(Model model) {

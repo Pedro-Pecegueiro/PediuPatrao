@@ -5,6 +5,7 @@ import com.umc.pediupatrao.exception.RegraNegocioException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -14,7 +15,7 @@ import java.util.Map;
 
 @RestControllerAdvice(assignableTypes = {
         UsuarioController.class, ClienteController.class, ProdutoController.class,
-        PedidoController.class, AuditoriaController.class
+        PedidoController.class, AuditoriaController.class, DashboardApiController.class
 })
 public class ApiExceptionHandler {
 
@@ -26,6 +27,11 @@ public class ApiExceptionHandler {
     @ExceptionHandler({RegraNegocioException.class, IllegalArgumentException.class})
     public ResponseEntity<Map<String, Object>> regraNegocio(RuntimeException ex) {
         return resposta(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Map<String, Object>> parametroInvalido(MethodArgumentTypeMismatchException ex) {
+        return resposta(HttpStatus.BAD_REQUEST, "Parâmetro inválido: " + ex.getName() + ".");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

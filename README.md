@@ -2,6 +2,8 @@
 
 Sistema web para gerenciamento de uma pizzaria. Permite cadastrar clientes e produtos, registrar e acompanhar pedidos, controlar o acesso dos funcionários e consultar as alterações registradas em auditoria.
 
+O painel administrativo apresenta indicadores de vendas, gráficos de acompanhamento, situação dos pedidos e ranking de produtos, com consulta por período e status.
+
 ## Tecnologias
 
 - Java 21
@@ -68,7 +70,7 @@ O perfil `GERENTE` inclui, altera e exclui produtos e clientes, registra pedidos
 
 O perfil `ATENDENTE` inclui e altera clientes, registra pedidos e atualiza seus status. Não administra usuários nem produtos, não exclui clientes, não consulta a auditoria, não aplica descontos e não cancela pedidos.
 
-As permissões são verificadas no servidor. O desconto é limitado a 20% e só pode ser aplicado antes da saída do pedido. O cancelamento também deve ocorrer antes da saída e exige justificativa. Somente o perfil `GERENTE` pode aplicar descontos ou cancelar pedidos.
+As permissões são verificadas no servidor. O desconto é limitado a 20% e é permitido somente antes da saída do pedido. O cancelamento também ocorre antes da saída e exige justificativa. Apenas o perfil `GERENTE` aplica descontos ou cancela pedidos.
 
 ## Regras dos pedidos
 
@@ -96,3 +98,11 @@ Na raiz do projeto, execute:
 ```
 
 A suíte automatizada verifica o cálculo dos pedidos, o registro de entrada e saída, as transições de status, os descontos e cancelamentos, as permissões dos perfis, a proteção CSRF e os dados de auditoria de pedidos e clientes.
+
+## Dashboard administrativo
+
+O dashboard está disponível em `/dashboard` para os perfis `ADMIN` e `GERENTE`. Os filtros consultam a API do próprio sistema e atualizam os indicadores e gráficos sem recarregar a página. O período padrão abrange os últimos 30 dias, incluindo a data atual; a API aceita períodos de até 366 dias.
+
+Os valores de vendas e o ranking consideram pedidos não cancelados. A distribuição por status inclui os pedidos cancelados. Se um status for selecionado no filtro, ele é aplicado aos indicadores, gráficos e ranking.
+
+Consulte [os requisitos e regras do dashboard](docs/requisitos-dashboard.md), [a documentação da API](docs/api-dashboard.md), [as evidências dos testes](docs/evidencias-testes.md) e [o roteiro da apresentação](docs/apresentacao.md).

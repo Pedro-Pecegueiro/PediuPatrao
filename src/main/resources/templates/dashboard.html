@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content" class="dashboard-page">
+    <div class="page-header">
+        <div>
+            <p class="eyebrow">ANÁLISE DA OPERAÇÃO</p>
+            <h1>Dashboard administrativo</h1>
+            <p>Vendas, pedidos e produtos no período selecionado.</p>
+        </div>
+    </div>
+
+    <form id="dashboard-filtros" class="data-box dashboard-filters" aria-label="Filtros do dashboard">
+        <label>
+            <span>Data inicial</span>
+            <input class="form-control" type="date" name="dataInicio" required>
+        </label>
+        <label>
+            <span>Data final</span>
+            <input class="form-control" type="date" name="dataFim" required>
+        </label>
+        <label>
+            <span>Status do pedido</span>
+            <select class="form-select" name="status">
+                <option value="">Todos os status</option>
+                <option th:each="status : ${statusPedidos}" th:value="${status.name()}" th:text="${status.descricao}"></option>
+            </select>
+        </label>
+        <button class="btn btn-primary" type="submit"><i class="bi bi-funnel me-1"></i>Aplicar filtros</button>
+        <span id="dashboard-atualizado" class="dashboard-updated" aria-live="polite"></span>
+    </form>
+
+    <div id="dashboard-erro" class="alert alert-danger d-none" role="alert"></div>
+    <div id="dashboard-carregando" class="alert alert-light border" role="status">Carregando dados do período…</div>
+
+    <section class="row g-3 mt-1" aria-label="Indicadores de vendas">
+        <div class="col-sm-6 col-xl-3">
+            <article class="dashboard-kpi"><span>Vendas no período</span><strong id="kpi-vendas">—</strong><small>Pedidos não cancelados</small></article>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <article class="dashboard-kpi"><span>Pedidos registrados</span><strong id="kpi-pedidos">—</strong><small>Inclui pedidos cancelados</small></article>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <article class="dashboard-kpi"><span>Pedidos com venda</span><strong id="kpi-pedidos-venda">—</strong><small>Exclui cancelamentos</small></article>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <article class="dashboard-kpi"><span>Ticket médio</span><strong id="kpi-ticket">—</strong><small>Vendas ÷ pedidos com venda</small></article>
+        </div>
+    </section>
+
+    <section class="row g-3 mt-1">
+        <div class="col-xl-8">
+            <article class="data-box dashboard-panel h-100">
+                <div class="dashboard-panel-heading"><div><h2>Vendas por dia</h2><p>Valor dos pedidos não cancelados</p></div></div>
+                <div class="dashboard-chart"><canvas id="grafico-vendas" aria-label="Gráfico de vendas por dia"></canvas></div>
+            </article>
+        </div>
+        <div class="col-xl-4">
+            <article class="data-box dashboard-panel h-100">
+                <div class="dashboard-panel-heading"><div><h2>Pedidos por status</h2><p>Quantidade em cada etapa</p></div></div>
+                <div class="dashboard-chart dashboard-chart-doughnut"><canvas id="grafico-status" aria-label="Gráfico de pedidos por status"></canvas></div>
+            </article>
+        </div>
+    </section>
+
+    <section class="data-box dashboard-panel mt-3">
+                <div class="dashboard-panel-heading"><div><h2>Produtos mais vendidos</h2><p>Ranking por unidades; subtotal dos itens antes do desconto</p></div></div>
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead><tr><th>Posição</th><th>Produto</th><th>Unidades</th><th>Subtotal dos itens</th></tr></thead>
+                <tbody id="ranking-produtos"><tr><td colspan="4" class="text-secondary">Carregando…</td></tr></tbody>
+            </table>
+        </div>
+    </section>
+
+    <script th:src="@{/plugins/chart.js/Chart.min.js}"></script>
+    <script th:src="@{/js/dashboard.js}"></script>
+</div>
+</body>
+</html>

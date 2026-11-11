@@ -24,6 +24,7 @@ public class Pedido {
     @Indexed
     private StatusPedido status;
     private String responsavelRegistro;
+    @Indexed
     private Instant dataEntrada;
     private String responsavelSaida;
     private Instant dataSaida;
